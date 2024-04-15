@@ -1,4 +1,13 @@
-from fastapi import APIRouter,HTTPException
+from fastapi import APIRouter,HTTPException,Depends
+from fastapi.security import OAuth2PasswordRequestForm
+
+from sqlalchemy.orm import Session
+from . import database
+
+from typing import Annotated
+
+from . import schema
+from . import auth
 
 auth_route =  APIRouter(
     prefix="/auth",
@@ -18,14 +27,12 @@ async def me():
     raise  HTTPException(status_code=400,detail={"error":"This route being developed"})
 
 @auth_route.post('/login')
-async def login():
-    raise  HTTPException(status_code=400,detail={"error":"This route being developed"})
-    
+async def login(db:Annotated[Session,Depends(database.get_db)],user:Annotated[OAuth2PasswordRequestForm,Depends()]):
+    return auth.login_user(db,user)
 
 @auth_route.post('/register')
-async def register():
-    raise  HTTPException(status_code=400,detail={"error":"This route being developed"})
-
+async def register(db:Annotated[Session,Depends(database.get_db)],register_user:schema.UserRegister):
+    return auth.register_user(db,register_user)
 
 # Url shortner 
 

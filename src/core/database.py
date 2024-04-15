@@ -9,7 +9,6 @@ from .. import config
 
 
 URL = os.getenv('DBDRIVER')+"://"+os.getenv('DBUSER')+":"+os.getenv('DBPASSWORD')+'@'+os.getenv('DBHOST')+"/"+os.getenv('DB')
-print(URL)
 
 engine = create_engine(url=URL) 
 
@@ -17,7 +16,11 @@ session_local = sessionmaker(bind=engine,autoflush=False,autocommit=False)
 
 Base = declarative_base()
 
-print(session_local)
-
-
+def get_db():
+    db =  session_local()
+    try:
+        yield db
+    except Exception as e:
+        db.close()
+        raise e
 
