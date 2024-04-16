@@ -21,11 +21,14 @@ def create_shorturl(db:Session,userid:int,data:schema.ShortUrl):
                 data.alias = generate_alias()
         
         user = auth.get_dbuser(db,userid)      
+        
         my_url_model =  models.ShortUrls(url = str(data.url),alias = data.alias,expire_on =data.expire_on,author=user.id) 
-        
-        if data.expire_on < timedelta(0):
-            raise HTTPException(status_code=400,detail={"error":"timedelta should be possitive"})
-        
+       
+       
+        if data.expire_on:
+            if data.expire_on < timedelta(0):
+                raise HTTPException(status_code=400,detail={"error":"timedelta should be possitive"})
+            
         if db.query(models.ShortUrls).filter(models.ShortUrls.alias == my_url_model.alias).first() is not None:
             raise HTTPException(status_code=409,detail={"error":"please choice another alias its already taken by someone"})
         
