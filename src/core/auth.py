@@ -83,10 +83,11 @@ def verify_password(plain_password,password):
 def get_me(db:Session,userid:str):
     try:
         user =  get_dbuser(db,userid)
-        userdict = {"username":user.username,"email":user.email}
+        userdict = {"username":user.username,"email":user.email,"Usermode":user.user_type}
         return userdict
     
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500,detail={"Error":"Sorry Dumb developer didn't know how to handle this error"})
 
 
@@ -109,6 +110,7 @@ def register_user(db:Session,user:schema.UserRegister):
         raise e
         
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500,detail={"error":"error while creating user"})
     
 def login_user(db:Session,login_details:schema.LoginUser):

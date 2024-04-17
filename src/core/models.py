@@ -3,6 +3,15 @@ from sqlalchemy.orm import Mapped,mapped_column,relationship,backref
 from sqlalchemy import ForeignKey,func
 from datetime import datetime,timedelta
 from typing import Optional
+from sqlalchemy import Enum
+import enum
+
+class UserEnum(enum.Enum):
+    SUPER_USER = "SUPER USER"
+    NORMAL_USER = "NORMAL USER"
+    ADMIN = "ADMIN"
+    POWER_USER = "POWER USER"
+
 
 class User(Base):
     __tablename__ = "User"
@@ -10,6 +19,7 @@ class User(Base):
     username:Mapped[str] = mapped_column(unique=True)
     email:Mapped[str] = mapped_column(unique=True)
     password:Mapped[str]
+    user_type = mapped_column(Enum(UserEnum),default=UserEnum.NORMAL_USER,nullable=True)
 
 class ShortUrls(Base):
     __tablename__ = "short_urls"

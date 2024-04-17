@@ -30,6 +30,7 @@ short_route = APIRouter()
 
 @auth_route.post('/login')
 async def login(db:Annotated[Session,Depends(database.get_db)],user:Annotated[OAuth2PasswordRequestForm,Depends()]):
+    print(user)
     return auth.login_user(db,user)
 
 @auth_route.post('/register')
@@ -37,7 +38,7 @@ async def register(db:Annotated[Session,Depends(database.get_db)],register_user:
     return auth.register_user(db,register_user)
 
 @auth_route.get('/me') 
-async def me(db:Annotated[Session,Depends(database.get_db)],userid:Annotated[str,Depends(auth.get_user)]) -> schema.RetriveUser:
+async def me(db:Annotated[Session,Depends(database.get_db)],userid:Annotated[str,Depends(auth.get_user)]):
     return auth.get_me(db,userid)
 
 # db:Annotated[Session,Depends(database.get_db)],userid:Annotated[str,Depends(auth.get_user)]
