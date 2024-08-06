@@ -1,4 +1,3 @@
-Sure, here's a definition for a URL Shortener API with features and implementation details:
 
 ## **Project Idea: URL Shortener API**
 
